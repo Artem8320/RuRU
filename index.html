@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>RuRuBurger — Премиальный стритфуд в Отрадной</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">🍔</div>
+      <span class="logo-text">RuRuBurger</span>
+    </a>
+    <div class="header-info">
+      <strong style="font-size:12px;color:var(--text-primary)">ст. Отрадная, ул. Ленина, 15Б</strong>
+      <span>Ежедневно с 11:00 до 22:00</span>
+    </div>
+    <div class="header-actions">
+      <a href="tel:+79181623145" class="btn-phone">📞 8 918 162 31 45</a>
+      <button class="btn-cart" id="cartToggle" aria-label="Корзина">🛒
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Станица Отрадная</div>
+    <h1 class="hero-title">Ruru<br>Burger</h1>
+    <p class="hero-subtitle">Сочные бургеры, хот-доги и снеки — приготовлено с любовью в сердце Отрадной</p>
+    <button class="hero-cta" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+      Смотреть меню <span class="arrow">↓</span>
+    </button>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">30+</div><div class="stat-label">Позиций</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><div class="stat-num">11–22</div><div class="stat-label">Часы</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><div class="stat-num">240₽</div><div class="stat-label">От цены</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MENU ===== -->
+<section class="menu-section" id="menu">
+  <div class="section-header">
+    <div class="section-label">— Наши блюда —</div>
+    <h2 class="section-title">Меню</h2>
+  </div>
+
+  <!-- iOS Segmented Control Tabs -->
+  <div class="tabs-wrapper">
+    <div class="tabs" id="tabsBar">
+      <div class="tab-indicator" id="tabIndicator"></div>
+      <button class="tab active" data-tab="burgers">🍔 Бургеры</button>
+      <button class="tab" data-tab="hotdogs">🌭 Хот-доги и Снеки</button>
+      <button class="tab" data-tab="fastfood">🫓 Фастфуд и Соусы</button>
+      <button class="tab" data-tab="drinks">🥤 Напитки и Десерты</button>
+    </div>
+  </div>
+
+  <div class="menu-panel active" id="panel-burgers">
+    <div class="sub-section-title">Бургеры</div>
+    <div class="menu-grid" id="grid-burgers"></div>
+  </div>
+
+  <div class="menu-panel" id="panel-hotdogs">
+    <div class="sub-section-title">Хот-Доги</div>
+    <div class="menu-grid" id="grid-hotdogs"></div>
+    <div class="sub-section-title">Снеки</div>
+    <div class="menu-grid" id="grid-snacks"></div>
+  </div>
+
+  <div class="menu-panel" id="panel-fastfood">
+    <div class="sub-section-title">Фастфуд</div>
+    <div class="menu-grid" id="grid-fastfood"></div>
+    <div class="sub-section-title">Соусы и Добавки</div>
+    <div class="menu-grid" id="grid-sauces"></div>
+  </div>
+
+  <div class="menu-panel" id="panel-drinks">
+    <div class="sub-section-title">Напитки</div>
+    <div class="menu-grid" id="grid-drinks"></div>
+    <div class="sub-section-title">Горячие напитки</div>
+    <div class="menu-grid" id="grid-hot"></div>
+    <div class="sub-section-title">Десерты</div>
+    <div class="menu-grid" id="grid-desserts"></div>
+  </div>
+</section>
+
+<!-- ===== STICKY BOTTOM BAR (мобильная корзина) ===== -->
+<div class="bottom-bar" id="bottomBar">
+  <button class="btn-open-cart" id="bottomCartBtn">
+    <span>🛒 Корзина <span id="bottomQty" class="bottom-bar-qty">0</span></span>
+    <span id="bottomTotal" class="bottom-bar-total">0 ₽</span>
+  </button>
+</div>
+
+<!-- ===== CART DRAWER ===== -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <span class="cart-title">Корзина</span>
+    <button class="cart-close" id="cartClose">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <span class="cart-empty-icon">🛒</span>
+      <p>Корзина пуста<br><span style="font-size:12px;color:var(--text-muted)">Добавьте что-нибудь вкусное</span></p>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Итого:</span>
+      <span class="cart-total-amount" id="cartTotal">0 ₽</span>
+    </div>
+    <button class="btn-order" id="btnOrder">⚡ Оформить заказ</button>
+  </div>
+</aside>
+
+<!-- ===== ORDER MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <span class="modal-icon">📋</span>
+    <div class="modal-title">Оформление заказа</div>
+    <p class="modal-sub">Заполните данные — мы получим заказ в Telegram</p>
+
+    <!-- Форма клиента -->
+    <div class="order-form">
+
+      <!-- Имя -->
+      <div class="form-row">
+        <label class="form-label" for="inputName">Ваше имя</label>
+        <input class="form-input" id="inputName" type="text" placeholder="Иван Иванов" autocomplete="name">
+      </div>
+
+      <!-- Телефон -->
+      <div class="form-row">
+        <label class="form-label" for="inputPhone">Телефон</label>
+        <input class="form-input" id="inputPhone" type="tel" placeholder="+7 918 000 00 00" autocomplete="tel">
+      </div>
+
+      <!-- Доставка / Самовывоз -->
+      <div class="form-row">
+        <label class="form-label">Способ получения</label>
+        <div class="delivery-toggle">
+          <button class="toggle-option" data-value="pickup">🏃 Самовывоз</button>
+          <button class="toggle-option active" data-value="delivery">🚗 Доставка</button>
+        </div>
+      </div>
+
+      <!-- Адрес (показывается при доставке) -->
+      <div class="address-field visible" id="addressField">
+        <label class="form-label" for="inputAddress">Адрес доставки</label>
+        <input class="form-input" id="inputAddress" type="text" placeholder="ул. Ленина, д. 10, кв. 5" autocomplete="street-address">
+      </div>
+
+    </div>
+
+    <!-- Состав корзины (preview) -->
+    <div class="modal-cart-preview" id="modalCartPreview"></div>
+    <div class="modal-total-line" id="modalTotalLine">Итого: <span>0 ₽</span></div>
+
+    <div class="modal-actions">
+      <button class="btn-send-order" id="btnSendOrder">✈️ Отправить заказ</button>
+      <button class="btn-modal-close" id="modalClose">Назад</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== iOS SUCCESS BANNER ===== -->
+<div class="success-banner" id="successBanner">
+  <div class="success-banner-icon">✅</div>
+  <div class="success-banner-text">
+    <div class="success-banner-title">Заказ принят!</div>
+    <div class="success-banner-sub">Мы скоро с вами свяжемся 🍔</div>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div style="max-width:500px;margin:0 auto">
+    <div class="footer-logo">RuRuBurger</div>
+    <div class="footer-address">ст. Отрадная, ул. Ленина, 15Б<br>Ежедневно с 11:00 до 22:00</div>
+    <a href="tel:+79181623145" class="footer-phone">8 918 162 31 45</a>
+    <div class="footer-copy">© 2024 RuRuBurger — Премиальный стритфуд в Отрадной</div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
