@@ -521,3 +521,38 @@ select.form-input option{background:#1a1a1e;color:var(--text-primary)}
   .delivery-toggle{grid-template-columns:1fr 1fr}
   .delivery-toggle .toggle-option:last-child{grid-column:1/-1}
 }
+
+/* EXTRA SCOOP ROW — compact grid layout */
+.esc-row {
+  display: grid;
+  grid-template-columns: 1fr 26px 22px 26px 38px;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.esc-row:last-of-type { border-bottom: none; }
+.esc-name {
+  font-size: 13px; font-weight: 500; color: var(--text-secondary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.esc-m, .esc-p {
+  width: 26px; height: 26px;
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-primary); font-size: 15px; font-weight: 700;
+  transition: var(--tr-fast); -webkit-tap-highlight-color: transparent;
+  padding: 0; line-height: 1;
+}
+.esc-m:active, .esc-p:active {
+  background: rgba(255,204,0,0.18); border-color: var(--gold-border); color: var(--gold);
+}
+.esc-n {
+  font-family: 'Bebas Neue', sans-serif; font-size: 17px;
+  color: var(--gold); text-align: center;
+}
+.esc-price {
+  font-size: 11px; font-weight: 700; color: var(--gold);
+  text-align: right; white-space: nowrap;
+}
