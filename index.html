@@ -57,7 +57,6 @@
     <h2 class="section-title">Меню</h2>
   </div>
 
-  <!-- iOS Segmented Control Tabs -->
   <div class="tabs-wrapper">
     <div class="tabs" id="tabsBar">
       <div class="tab-indicator" id="tabIndicator"></div>
@@ -72,32 +71,54 @@
     <div class="sub-section-title">Бургеры</div>
     <div class="menu-grid" id="grid-burgers"></div>
   </div>
-
   <div class="menu-panel" id="panel-hotdogs">
     <div class="sub-section-title">Хот-Доги</div>
     <div class="menu-grid" id="grid-hotdogs"></div>
     <div class="sub-section-title">Снеки</div>
     <div class="menu-grid" id="grid-snacks"></div>
   </div>
-
   <div class="menu-panel" id="panel-fastfood">
     <div class="sub-section-title">Фастфуд</div>
     <div class="menu-grid" id="grid-fastfood"></div>
-    <div class="sub-section-title">Соусы и Добавки</div>
+    <div class="sub-section-title">Соусы</div>
     <div class="menu-grid" id="grid-sauces"></div>
   </div>
-
   <div class="menu-panel" id="panel-drinks">
+    <div class="sub-section-title">Десерты</div>
+    <div class="menu-grid" id="grid-desserts"></div>
     <div class="sub-section-title">Напитки</div>
     <div class="menu-grid" id="grid-drinks"></div>
     <div class="sub-section-title">Горячие напитки</div>
     <div class="menu-grid" id="grid-hot"></div>
-    <div class="sub-section-title">Десерты</div>
-    <div class="menu-grid" id="grid-desserts"></div>
   </div>
 </section>
 
-<!-- ===== STICKY BOTTOM BAR (мобильная корзина) ===== -->
+<!-- ===== SUPPORT SECTION ===== -->
+<section class="support-section" id="support">
+  <div class="support-inner">
+    <div class="support-icon">🎧</div>
+    <h2 class="support-title">Поддержка</h2>
+    <p class="support-text">Ошиблись с заказом или есть вопросы?<br>Свяжитесь с нами — решим моментально.</p>
+    <a href="tel:+79181623145" class="support-phone">📞 8 918 162 31 45</a>
+    <div class="support-socials">
+      <a class="support-social-btn tg"  id="supportTg"  href="#" target="_blank">✈️ Telegram</a>
+      <a class="support-social-btn wa"  id="supportWa"  href="#" target="_blank">📱 WhatsApp</a>
+      <a class="support-social-btn max" id="supportMax" href="#" target="_blank">💬 MAX</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div style="max-width:500px;margin:0 auto;text-align:center">
+    <div class="footer-logo">RuRuBurger</div>
+    <div class="footer-address">ст. Отрадная, ул. Ленина, 15Б<br>Ежедневно с 11:00 до 22:00</div>
+    <a href="tel:+79181623145" class="footer-phone">8 918 162 31 45</a>
+    <div class="footer-copy">© 2024 RuRuBurger — Премиальный стритфуд в Отрадной</div>
+  </div>
+</footer>
+
+<!-- ===== STICKY BOTTOM BAR ===== -->
 <div class="bottom-bar" id="bottomBar">
   <button class="btn-open-cart" id="bottomCartBtn">
     <span>🛒 Корзина <span id="bottomQty" class="bottom-bar-qty">0</span></span>
@@ -112,12 +133,7 @@
     <span class="cart-title">Корзина</span>
     <button class="cart-close" id="cartClose">✕</button>
   </div>
-  <div class="cart-items" id="cartItems">
-    <div class="cart-empty">
-      <span class="cart-empty-icon">🛒</span>
-      <p>Корзина пуста<br><span style="font-size:12px;color:var(--text-muted)">Добавьте что-нибудь вкусное</span></p>
-    </div>
-  </div>
+  <div class="cart-items" id="cartItems"></div>
   <div class="cart-footer">
     <div class="cart-total-row">
       <span class="cart-total-label">Итого:</span>
@@ -132,48 +148,115 @@
   <div class="modal">
     <span class="modal-icon">📋</span>
     <div class="modal-title">Оформление заказа</div>
-    <p class="modal-sub">Заполните данные — мы получим заказ в Telegram</p>
+    <p class="modal-sub">Заполните данные и выберите способ отправки</p>
 
-    <!-- Форма клиента -->
     <div class="order-form">
-
-      <!-- Имя -->
       <div class="form-row">
-        <label class="form-label" for="inputName">Ваше имя</label>
+        <label class="form-label">Ваше имя</label>
         <input class="form-input" id="inputName" type="text" placeholder="Иван Иванов" autocomplete="name">
       </div>
-
-      <!-- Телефон -->
       <div class="form-row">
-        <label class="form-label" for="inputPhone">Телефон</label>
+        <label class="form-label">Телефон</label>
         <input class="form-input" id="inputPhone" type="tel" placeholder="+7 918 000 00 00" autocomplete="tel">
       </div>
-
-      <!-- Доставка / Самовывоз -->
       <div class="form-row">
         <label class="form-label">Способ получения</label>
         <div class="delivery-toggle">
-          <button class="toggle-option" data-value="pickup">🏃 Самовывоз</button>
-          <button class="toggle-option active" data-value="delivery">🚗 Доставка</button>
+          <button class="toggle-option active" data-value="pickup">🏃 Самовывоз</button>
+          <button class="toggle-option" data-value="hall">🪑 В зале</button>
+          <button class="toggle-option" data-value="delivery">🚗 Доставка</button>
         </div>
       </div>
-
-      <!-- Адрес (показывается при доставке) -->
-      <div class="address-field visible" id="addressField">
-        <label class="form-label" for="inputAddress">Адрес доставки</label>
-        <input class="form-input" id="inputAddress" type="text" placeholder="ул. Ленина, д. 10, кв. 5" autocomplete="street-address">
+      <div class="delivery-block" id="deliveryBlock">
+        <div class="form-row">
+          <label class="form-label">Станица доставки</label>
+          <select class="form-input" id="villageSelect"></select>
+        </div>
+        <div class="delivery-price-note" id="deliveryPriceNote"></div>
+        <div class="form-row">
+          <label class="form-label">Адрес доставки</label>
+          <input class="form-input" id="inputAddress" type="text" placeholder="ул. Ленина, д. 10, кв. 5" autocomplete="street-address">
+        </div>
       </div>
-
     </div>
 
-    <!-- Состав корзины (preview) -->
     <div class="modal-cart-preview" id="modalCartPreview"></div>
     <div class="modal-total-line" id="modalTotalLine">Итого: <span>0 ₽</span></div>
 
-    <div class="modal-actions">
-      <button class="btn-send-order" id="btnSendOrder">✈️ Отправить заказ</button>
-      <button class="btn-modal-close" id="modalClose">Назад</button>
+    <label class="consent-row" id="consentRow">
+      <div class="consent-check-wrap">
+        <input type="checkbox" id="consentCheck">
+        <span class="consent-box"></span>
+      </div>
+      <span class="consent-text">Согласен(на) с <button class="consent-link" id="consentLink">обработкой персональных данных</button> в целях оформления заказа (ФЗ-152)</span>
+    </label>
+    <div class="send-label">Отправить заказ через:</div>
+    <div class="send-buttons">
+      <button class="btn-send-order primary" id="btnSendScript">⚡ Авто (рекомендуем)</button>
+      <button class="btn-send-order wa"     id="btnSendWa">📱 WhatsApp</button>
+      <button class="btn-send-order max-btn" id="btnSendMax">💬 MAX</button>
+      <button class="btn-send-order tg-btn" id="btnSendTg">✈️ Telegram</button>
     </div>
+    <button class="btn-modal-close" id="modalClose">Назад</button>
+  </div>
+</div>
+
+<!-- ===== COPY MODAL (WhatsApp / MAX / Telegram) ===== -->
+<div class="modal-overlay" id="copyModalOverlay">
+  <div class="modal">
+    <span class="modal-icon" id="copyIcon">📱</span>
+    <div class="modal-title" id="copyTitle">Отправить заказ</div>
+    <p class="modal-sub">Скопируйте текст заказа и отправьте нам</p>
+    <textarea class="order-textarea" id="orderTextarea" readonly></textarea>
+    <div class="copy-actions">
+      <button class="btn-send-order primary" id="btnCopy">📋 Скопировать заказ</button>
+      <button class="btn-send-order" id="btnOpenApp" style="background:var(--glass-bg);border:1px solid var(--glass-border);color:var(--text-primary)">Открыть мессенджер →</button>
+    </div>
+    <div class="copy-success" id="copySuccess">✓ Скопировано!</div>
+    <button class="btn-modal-close" id="copyModalClose" style="margin-top:10px">Назад</button>
+  </div>
+</div>
+
+
+<!-- ===== PRIVACY POLICY MODAL ===== -->
+<div class="modal-overlay" id="privacyModalOverlay">
+  <div class="modal">
+    <span class="modal-icon">🔒</span>
+    <div class="modal-title">Персональные данные</div>
+    <p class="modal-sub">Политика обработки персональных данных</p>
+    <div class="privacy-text">
+      <p>Настоящим вы даёте согласие на обработку следующих персональных данных:</p>
+      <ul>
+        <li>Имя</li>
+        <li>Номер телефона</li>
+        <li>Адрес доставки (при наличии)</li>
+      </ul>
+      <p><strong>Цель:</strong> исключительно для оформления и доставки заказа.</p>
+      <p><strong>Оператор:</strong> RuRuBurger, ст. Отрадная, ул. Ленина, 15Б.</p>
+      <p><strong>Хранение:</strong> данные не передаются третьим лицам и хранятся только в течение обработки заказа.</p>
+      <p><strong>Основание:</strong> Федеральный закон № 152-ФЗ «О персональных данных» от 27.07.2006.</p>
+      <p>Вы вправе отозвать согласие, обратившись к нам по телефону или в мессенджере.</p>
+    </div>
+    <button class="btn-send-order primary" id="privacyAccept" style="margin-top:16px;width:100%">Понятно, согласен(на)</button>
+    <button class="btn-modal-close" id="privacyClose" style="margin-top:8px">Закрыть</button>
+  </div>
+</div>
+
+<!-- ===== SUCCESS MODAL ===== -->
+<div class="modal-overlay" id="successModalOverlay">
+  <div class="modal">
+    <span class="modal-icon">🎉</span>
+    <div class="modal-title">Заказ принят!</div>
+    <p class="modal-sub">Мы уже готовим его для вас</p>
+    <div class="modal-cart-preview" id="successOrderSummary"></div>
+    <div class="success-contact-label">Хотите изменить заказ? Свяжитесь с нами:</div>
+    <div class="success-contacts">
+      <a class="success-contact-btn"     href="tel:+79181623145">📞 Позвонить</a>
+      <a class="success-contact-btn tg"  id="successTg"  href="#" target="_blank">✈️ Telegram</a>
+      <a class="success-contact-btn wa"  id="successWa"  href="#" target="_blank">📱 WhatsApp</a>
+      <a class="success-contact-btn max" id="successMax" href="#" target="_blank">💬 MAX</a>
+    </div>
+    <button class="btn-send-order primary" id="successClose" style="margin-top:16px;width:100%">Отлично!</button>
   </div>
 </div>
 
@@ -188,16 +271,6 @@
 
 <!-- ===== TOAST ===== -->
 <div class="toast-container" id="toastContainer"></div>
-
-<!-- ===== FOOTER ===== -->
-<footer>
-  <div style="max-width:500px;margin:0 auto">
-    <div class="footer-logo">RuRuBurger</div>
-    <div class="footer-address">ст. Отрадная, ул. Ленина, 15Б<br>Ежедневно с 11:00 до 22:00</div>
-    <a href="tel:+79181623145" class="footer-phone">8 918 162 31 45</a>
-    <div class="footer-copy">© 2024 RuRuBurger — Премиальный стритфуд в Отрадной</div>
-  </div>
-</footer>
 
 <script src="app.js"></script>
 </body>
