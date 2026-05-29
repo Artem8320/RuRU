@@ -2,7 +2,7 @@
    RuRuBurger — app.js
    ============================================== */
 
-/* НАСТРОЙКИ */
+/* ══ НАСТРОЙКИ ══════════════════════════════════════════ */
 const GOOGLE_SCRIPT_URL = 'СЮДА_ССЫЛКУ_НА_GOOGLE_SCRIPT';
 const CONTACTS = {
   phone:'tel:+79181623145',
@@ -16,41 +16,77 @@ const DELIVERY_OPTIONS = [
   {name:'Удобная',price:500},{name:'Попутная',price:500},
 ];
 
-/* ФОТО — замени '' на URL своей фотографии (квадрат 400x400px) */
+/* ══ ФОТО ════════════════════════════════════════════════
+   Замени '' на URL своей фотографии (квадрат 400×400px)  */
 const MENU_PHOTOS = {
-  'Двойной Биг Бургер':'','Биг Бургер':'','Двойной Бургер':'','Бургер':'','Чикенбургер':'img/burger/chikenburger.jpg',
+  'Двойной Биг Бургер':'','Биг Бургер':'','Двойной Бургер':'','Бургер':'','Чикенбургер':'',
   'Хот-Дог':'','Френч-Дог':'',
   'Картофель Фри':'','Картофель по-деревенски':'','Наггетсы':'','Сырные палочки':'',
   'Крылышки':'','Стрипсы':'','Креветки в панировке':'',
-  'Гирос в лепешке':'','Клаб-Сэндвич':'','Тортилья':'','Кесадилья':'img/fasfood/kesadilia.jpg',
-  'Скипасти':'','Половинка скипасти':'',
+  'Гирос в лепешке':'','Гирос на тарелке':'','Клаб-Сэндвич':'','Тортилья':'',
+  'Кесадилья':'','Скипасти':'','Половинка скипасти':'',
   'Молочный коктейль':'','Мохито':'','Лимонад':'','Айс латте':'',
   'Чай':'','Кофе':'','MacCoffee 3 в 1':'',
   'Чизкейк Арахис-карамель':'','Чизкейк Шоколадный':'','Чизкейк Клубничный':'',
   'Блин с начинкой':'','Вафли с мороженым':'','Холодный Бургер':'','Мороженое':'',
+  /* Соусы */
+  'Кисло-сладкий соус':'','Сырный соус':'','Кетчуп':'','Соус Барбекю':'',
+  'Соус 1000 островов':'','Красный соус':'','Белый соус':'',
+  /* Напитки (обычные) */
+  'Добрый Спрайт':'','Добрый Киви-виноград':'','Добрый Манго-маракуйя':'',
+  'Сок Добрый Яблоко':'','Сок Добрый Мультифрукт':'',
+  'Сок Ричи Вишня':'','Сок Ричи Апельсин':'',
+  'Чай Ричи Лимон':'','Чай Ричи Персик':'','Чай Ричи Зелёный':'',
+  'Палпи':'','Вода газированная':'','Вода негазированная':'',
 };
+
+/* ══ ФОТО ПО ОБЪЁМУ ══════════════════════════════════════
+   Для напитков с вариантами — фото меняется при выборе объёма
+   Пример: 'Добрый Кола': {'0.33 л':'url_маленький', '0.5 л':'url_большой'} */
+const VARIANT_PHOTOS = {
+  'Добрый Кола':  {'0.33 л':'img/napitki/kola033.jpg', '0.5 л':'img/napitki/kola05.jpg'},
+  'Добрый Фанта': {'0.33 л':'', '0.5 л':''},
+  'Адреналин':    {'0.25 л':'', '0.5 л':''},
+};
+
 const CATEGORY_EMOJI = {
   burgers:'🍔',hotdogs:'🌭',snacks:'🍟',fastfood:'🫓',
   sauces:'🥣',drinks:'🥤',hot:'☕',desserts:'🍰',
 };
 
-/* ДОБАВКИ */
-const TOPPINGS = [
-  {id:'onion', label:'Маринованный лук',price:40},
-  {id:'pepper',label:'Халапеньо',       price:40},
-  {id:'cheese',label:'Доп. сыр',        price:50},
-];
-const TOPPING_CATEGORIES = ['burgers','hotdogs','fastfood'];
+/* ╔══════════════════════════════════════════════════════════╗
+   ║  ★  ДОБАВКИ — меняй здесь, изменится везде  ★           ║
+   ║                                                          ║
+   ║  Отдельные добавки:                                      ║
+   ║    TOP_ONION  — маринованный лук  +40₽                   ║
+   ║    TOP_PEPPER — халапеньо         +40₽                   ║
+   ║    TOP_CHEESE — дополнительный сыр +50₽                  ║
+   ║                                                          ║
+   ║  Готовые наборы (используй в свойстве toppings блюда):   ║
+   ║    TOPS_ALL          — лук + халапеньо + сыр             ║
+   ║    TOPS_PEPPER_ONLY  — только халапеньо                  ║
+   ║    TOPS_NONE         — без добавок                       ║
+   ╚══════════════════════════════════════════════════════════╝ */
+const TOP_ONION  = {id:'onion',  label:'Маринованный лук', price:40};
+const TOP_PEPPER = {id:'pepper', label:'Халапеньо',        price:40};
+const TOP_CHEESE = {id:'cheese', label:'Доп. сыр',         price:50};
 
-/* ============================================================
-   MENU DATA
-   requireVariant:true   — обязательный выбор типа/вкуса
-   cheeseChoice:true     — Моцарелла/Чеддер
-   fillingChoice:[...]   — Нутелла/Сгущенка и т.п.
-   iceCreamFlavor:true   — вкус мороженого + доп.шарики
-   noExtraScoop:true     — без доп.шариков
-   iceCream3:true        — 3 шарика с выбором вкуса
-   ============================================================ */
+const TOPS_ALL         = [TOP_ONION, TOP_PEPPER, TOP_CHEESE];
+const TOPS_PEPPER_ONLY = [TOP_PEPPER];
+const TOPS_NONE        = [];
+
+// Наборы по умолчанию для категорий
+const CATEGORY_TOPS = {
+  burgers:  TOPS_ALL,
+  hotdogs:  TOPS_ALL,
+  fastfood: TOPS_PEPPER_ONLY,
+};
+
+/* ══ MENU DATA ═══════════════════════════════════════════════════════════════
+   Свойство toppings у блюда переопределяет набор добавок для этого блюда.
+   Не указано → берётся CATEGORY_TOPS[category].
+   Пример: toppings: TOPS_NONE — совсем без добавок
+   ══════════════════════════════════════════════════════════════════════════ */
 const menuData = {
   burgers:[
     {name:'Двойной Биг Бургер',desc:'Большая булочка, двойная котлета, сыр, помидор, малосольный огурец',requireVariant:true,variants:[
@@ -71,6 +107,7 @@ const menuData = {
     ]},
     {name:'Чикенбургер',desc:'Большая булочка, куриные стрипсы, сыр, помидор, лист салата, кисло-сладкий соус, сырный соус',price:320},
   ],
+
   hotdogs:[
     {name:'Хот-Дог',desc:'Булочка, колбаска, сыр, карамелизированный лук, кетчуп, майонез, горчичный соус',requireVariant:true,variants:[
       {label:'Говяжий',price:270},{label:'Куриный',price:250},
@@ -79,6 +116,7 @@ const menuData = {
       {label:'Говяжий',price:220},{label:'Куриный',price:190},
     ]},
   ],
+
   snacks:[
     {name:'Картофель Фри',          desc:'Золотистые хрустящие ломтики',          variants:[{label:'150г',price:170},{label:'300г',price:300}]},
     {name:'Картофель по-деревенски',desc:'Кусочки с кожурой, фирменная приправа', variants:[{label:'150г',price:180},{label:'300г',price:320}]},
@@ -88,18 +126,29 @@ const menuData = {
     {name:'Стрипсы',                desc:'В хрустящей панировке',                 variants:[{label:'3 шт',price:140},{label:'6 шт',price:250},{label:'9 шт',price:340}]},
     {name:'Креветки в панировке',   desc:'Тигровые креветки в хрустящей корочке', variants:[{label:'3 шт',price:170},{label:'6 шт',price:290},{label:'9 шт',price:380}]},
   ],
+
   fastfood:[
-    {name:'Гирос в лепешке',desc:'Пита, куриное филе, помидор, картошка фри, маринованный лук',requireVariant:true,variants:[
-      {label:'Белый соус',          price:380},
-      {label:'Белый + красный соус',price:380},
-    ]},
-    {name:'Клаб-Сэндвич',   desc:'Тостовый хлеб, куриное филе, яйцо, помидор, салат, бекон, майонез, горчица',price:360},
-    {name:'Тортилья',        desc:'Пшеничная лепёшка, куриное филе, свежие овощи, соус',                        price:360,cheeseChoice:true},
-    {name:'Кесадилья',       desc:'Лепёшка, плавленый сыр, курица, томаты',                                     price:320},
-    {name:'Скипасти',        desc:'Пита, куриное филе, помидор, картофель фри, маринованный лук, белый соус',   price:620,cheeseChoice:true},
-    {name:'Половинка скипасти',desc:'Пита, куриное филе, помидор, картофель фри, маринованный лук, белый соус', price:340,cheeseChoice:true},
+    // toppings — явно указан набор добавок для каждого блюда
+    {name:'Гирос в лепешке',desc:'Пита, куриное филе, помидор, картошка фри, маринованный лук',
+      requireVariant:true,toppings:TOPS_PEPPER_ONLY,
+      variants:[{label:'Белый соус',price:380},{label:'Белый + красный соус',price:380}]},
+    {name:'Гирос на тарелке',desc:'Пита, куриное филе, помидор, картошка фри, маринованный лук',
+      requireVariant:true,toppings:TOPS_PEPPER_ONLY,
+      variants:[{label:'Белый соус',price:380},{label:'Белый + красный соус',price:380}]},
+    {name:'Клаб-Сэндвич',   desc:'Тостовый хлеб, куриное филе, яйцо, помидор, салат, бекон, майонез, горчица',
+      price:360, toppings:TOPS_NONE},
+    {name:'Тортилья',        desc:'Пшеничная лепёшка, куриное филе, свежие овощи, соус',
+      price:360, cheeseChoice:true, toppings:TOPS_PEPPER_ONLY},
+    {name:'Кесадилья',       desc:'Лепёшка, плавленый сыр, курица, томаты',
+      price:320, toppings:TOPS_PEPPER_ONLY},
+    {name:'Скипасти',        desc:'Пита, куриное филе, помидор, картофель фри, маринованный лук, белый соус',
+      price:620, cheeseChoice:true, toppings:TOPS_PEPPER_ONLY},
+    {name:'Половинка скипасти',desc:'Пита, куриное филе, помидор, картофель фри, маринованный лук, белый соус',
+      price:340, cheeseChoice:true, toppings:TOPS_PEPPER_ONLY},
   ],
+
   sauces:[
+    // Маринованный лук и Дополнительный сыр убраны отсюда
     {name:'Кисло-сладкий соус', desc:'',variants:[{label:'Маленький',price:40},{label:'Большой',price:50}]},
     {name:'Сырный соус',        desc:'',variants:[{label:'Маленький',price:40},{label:'Большой',price:50}]},
     {name:'Кетчуп',             desc:'',variants:[{label:'Маленький',price:40},{label:'Большой',price:50}]},
@@ -107,51 +156,53 @@ const menuData = {
     {name:'Соус 1000 островов', desc:'',variants:[{label:'Маленький',price:40},{label:'Большой',price:50}]},
     {name:'Красный соус',       desc:'',variants:[{label:'Маленький',price:40},{label:'Большой',price:50}]},
     {name:'Белый соус',         desc:'',variants:[{label:'Маленький',price:40},{label:'Большой',price:50}]},
-    {name:'Маринованный лук',   desc:'Добавка к блюду',price:40},
     {name:'Перец халапеньо',    desc:'Добавка, острый', price:40},
-    {name:'Дополнительный сыр', desc:'Добавка',         price:50},
   ],
+
   drinks:[
-    {name:'Добрый Кола',          desc:'',variants:[{label:'0.33 л',price:120},{label:'0.5 л',price:130}]},
-    {name:'Добрый Фанта',         desc:'',variants:[{label:'0.33 л',price:120},{label:'0.5 л',price:130}]},
+    // Кола/Фанта/Адреналин — при выборе объёма меняется фото (см. VARIANT_PHOTOS выше)
+    {name:'Добрый Кола',  desc:'',variants:[{label:'0.33 л',price:120},{label:'0.5 л',price:130}]},
+    {name:'Добрый Фанта', desc:'',variants:[{label:'0.33 л',price:120},{label:'0.5 л',price:130}]},
     {name:'Добрый Спрайт',        desc:'0.33 л',price:120},
     {name:'Добрый Киви-виноград', desc:'0.33 л',price:120},
     {name:'Добрый Манго-маракуйя',desc:'0.5 л', price:130},
-    {name:'Адреналин',            desc:'Энергетик',variants:[{label:'0.25 л',price:120},{label:'0.5 л',price:160}]},
+    {name:'Адреналин',desc:'Энергетик',variants:[{label:'0.25 л',price:120},{label:'0.5 л',price:160}]},
     {name:'Сок Добрый Яблоко',    desc:'0.3 л',price:100},
     {name:'Сок Добрый Мультифрукт',desc:'0.3 л',price:100},
-    {name:'Сок Ричи Вишня',       desc:'0.3 л',price:110},
-    {name:'Сок Ричи Апельсин',    desc:'0.3 л',price:110},
-    {name:'Чай Ричи Лимон',       desc:'0.5 л',price:130},
-    {name:'Чай Ричи Персик',      desc:'0.5 л',price:130},
-    {name:'Чай Ричи Зелёный',     desc:'0.5 л',price:130},
-    {name:'Палпи',                desc:'0.5 л, апельсиновый',price:120},
-    {name:'Вода газированная',    desc:'0.5 л',price:60},
-    {name:'Вода негазированная',  desc:'0.5 л',price:60},
-    {name:'Молочный коктейль',desc:'0.4 л',requireVariant:true,variants:[
+    {name:'Сок Ричи Вишня',   desc:'0.3 л',price:110},
+    {name:'Сок Ричи Апельсин',desc:'0.3 л',price:110},
+    {name:'Чай Ричи Лимон', desc:'0.5 л',price:130},
+    {name:'Чай Ричи Персик',desc:'0.5 л',price:130},
+    {name:'Чай Ричи Зелёный',desc:'0.5 л',price:130},
+    {name:'Палпи',desc:'0.5 л, апельсиновый',price:120},
+    {name:'Вода газированная',  desc:'0.5 л',price:60},
+    {name:'Вода негазированная',desc:'0.5 л',price:60},
+    // Только 0.5 л — без выбора объёма
+    {name:'Молочный коктейль',desc:'0.5 л',requireVariant:true,variants:[
       {label:'Ванильный',price:250},{label:'Шоколадный',price:250},{label:'Клубничный',price:250},
     ]},
-    {name:'Мохито',desc:'0.4 л',requireVariant:true,variants:[
+    {name:'Мохито',desc:'0.5 л',requireVariant:true,variants:[
       {label:'Стандартный',price:240},{label:'Клубничный',price:240},
     ]},
-    {name:'Лимонад',desc:'0.4 л',requireVariant:true,variants:[
+    {name:'Лимонад',desc:'0.5 л',requireVariant:true,variants:[
       {label:'Клубника/вишня',    price:240},
       {label:'Грейпфрут/апельсин',price:240},
       {label:'Апельсин/маракуйя', price:240},
     ]},
-    {name:'Айс латте',desc:'',requireVariant:true,variants:[
-      {label:'0.3 л',price:250},{label:'0.5 л',price:300},
-    ]},
+    {name:'Айс латте',desc:'0.5 л',price:300},
   ],
+
   hot:[
     {name:'Чай',desc:'',requireVariant:true,variants:[
       {label:'Чёрный',price:50},{label:'Зелёный',price:50},
     ]},
     {name:'Кофе',desc:'',requireVariant:true,variants:[
-      {label:'Американо',price:200},{label:'Капучино',price:200},{label:'Латте',price:200},{label:'Эспрессо',price:200},
+      {label:'Американо',price:200},{label:'Капучино',price:200},
+      {label:'Латте',price:200},{label:'Эспрессо',price:200},
     ]},
     {name:'MacCoffee 3 в 1',desc:'',price:50},
   ],
+
   desserts:[
     {name:'Чизкейк Арахис-карамель',desc:'Нежный сливочный чизкейк с карамелью и арахисом',price:230},
     {name:'Чизкейк Шоколадный',     desc:'Насыщенный шоколадный чизкейк',                   price:230},
@@ -161,33 +212,20 @@ const menuData = {
     ]},
     {name:'Вафли с мороженым',desc:'Вафли, начинка, банан, мороженое',price:260,
       fillingChoice:['Нутелла','Сгущенка'],
-      iceCreamFlavor:true,
-      iceFlavors:['Ванильное','Шоколадное','Клубничное'],
-      extraScoopPrice:50,
-    },
+      iceCreamFlavor:true,iceFlavors:['Ванильное','Шоколадное','Клубничное'],extraScoopPrice:50},
     {name:'Холодный Бургер',desc:'Булочка, нутелла, банан, мороженое',price:290,
-      iceCreamFlavor:true,
-      iceFlavors:['Ванильный','Шоколадный','Клубничный'],
-      noExtraScoop:true,
-    },
+      iceCreamFlavor:true,iceFlavors:['Ванильный','Шоколадный','Клубничный'],noExtraScoop:true},
     {name:'Мороженое',desc:'Порция — 3 шарика, можно разные вкусы. Доп. шарик +50 руб.',price:250,
-      iceCream3:true,
-      iceFlavors:['Ванильное','Шоколадное','Клубничное'],
-      extraScoopPrice:50,
-    },
+      iceCream3:true,iceFlavors:['Ванильное','Шоколадное','Клубничное'],extraScoopPrice:50},
   ],
 };
 
-/* ==============================
-   CART
-============================== */
+/* ══ CART ════════════════════════════════════════════════ */
 var cart=[];
 function makeKey(n,v,t){return n+'|'+(v||'')+'|'+(t||[]).slice().sort().join(',');}
 function cartSum(){return cart.reduce(function(s,i){return s+i.price*i.qty;},0);}
 
-/* ==============================
-   CREATE CARD
-============================== */
+/* ══ CREATE CARD ════════════════════════════════════════ */
 var allCards=[];
 
 function createCard(item,category){
@@ -201,11 +239,19 @@ function createCard(item,category){
   var hasIceCreamFlav=!!item.iceCreamFlavor;
   var noExtraScoop   =!!item.noExtraScoop;
   var hasIceCream3   =!!item.iceCream3;
-  var hasToppings    =TOPPING_CATEGORIES.indexOf(category)!==-1;
   var extraScoopPrice=item.extraScoopPrice||50;
   var iceFlavors     =item.iceFlavors||['Ванильное','Шоколадное','Клубничное'];
 
-  /* Price display */
+  // Determine toppings for this item
+  var itemToppings;
+  if(item.hasOwnProperty('toppings')){
+    itemToppings=item.toppings;
+  } else {
+    itemToppings=CATEGORY_TOPS[category]||[];
+  }
+  var hasToppings=itemToppings.length>0;
+
+  // Price display
   var basePrice;
   if(hasVariants){
     var prices=item.variants.map(function(v){return v.price;});
@@ -213,17 +259,24 @@ function createCard(item,category){
   } else {basePrice=item.price||0;}
   var allSamePrice=hasVariants&&item.variants.every(function(v){return v.price===item.variants[0].price;});
   var priceDisplay=isRequired&&hasVariants
-    ?(function(){var mn=Math.min.apply(null,item.variants.map(function(v){return v.price;})),mx=Math.max.apply(null,item.variants.map(function(v){return v.price;}));return mn===mx?mn+'₽':mn+'–'+mx+'₽';})()
+    ?(function(){
+        var mn=Math.min.apply(null,item.variants.map(function(v){return v.price;}));
+        var mx=Math.max.apply(null,item.variants.map(function(v){return v.price;}));
+        return mn===mx?mn+'₽':mn+'–'+mx+'₽';
+      })()
     :basePrice+'₽';
 
-  /* Photo */
-  var photoUrl=MENU_PHOTOS[item.name]||'';
+  // Photo — если есть VARIANT_PHOTOS, используем фото первого варианта по умолчанию
+  var vp0=VARIANT_PHOTOS[item.name];
+  var photoUrl=(vp0&&hasVariants&&item.variants[0]&&vp0[item.variants[0].label])
+    ?vp0[item.variants[0].label]
+    :(MENU_PHOTOS[item.name]||'');
   var emoji=CATEGORY_EMOJI[category]||'🍽️';
   var photoHTML=photoUrl
-    ?'<div class="card-photo"><img src="'+photoUrl+'" alt="'+item.name+'" loading="lazy"></div>'
+    ?'<div class="card-photo"><img class="card-photo-img" src="'+photoUrl+'" alt="'+item.name+'" loading="lazy"></div>'
     :'<div class="card-photo"><div class="card-photo-placeholder">'+emoji+'</div></div>';
 
-  /* Variant pills */
+  // Variant pills
   var varHTML='';
   if(hasVariants){
     var pills=item.variants.map(function(v,i){
@@ -235,7 +288,7 @@ function createCard(item,category){
     varHTML='<div class="required-choice"><div class="rc-label">⚡ Тип начинки</div><div class="rc-pills">'+pills+'</div></div>';
   }
 
-  /* Cheese */
+  // Cheese
   var cheeseHTML='';
   if(hasCheeseChoice){
     cheeseHTML='<div class="required-choice"><div class="rc-label">🧀 Выберите сыр</div><div class="rc-pills">'
@@ -244,7 +297,7 @@ function createCard(item,category){
       +'</div></div>';
   }
 
-  /* Filling (Нутелла/Сгущенка) */
+  // Filling (Нутелла/Сгущенка)
   var fillingHTML='';
   if(fillingChoice){
     var fBtns=fillingChoice.map(function(f){
@@ -253,7 +306,7 @@ function createCard(item,category){
     fillingHTML='<div class="required-choice"><div class="rc-label">🥞 Начинка</div><div class="rc-pills">'+fBtns+'</div></div>';
   }
 
-  /* Ice cream single flavor + counter extra scoops */
+  // Ice cream flavor + extra scoop counters
   var iceCreamFlavorHTML='';
   if(hasIceCreamFlav){
     var fpills=iceFlavors.map(function(f){
@@ -262,7 +315,7 @@ function createCard(item,category){
     var extraRows=!noExtraScoop?iceFlavors.map(function(f){
       return '<div class="esc-row">'
         +'<span class="esc-name">'+f+'</span>'
-        +'<button class="esc-m" data-flavor="'+f+'">−</button>'
+        +'<button class="esc-m" data-flavor="'+f+'" style="opacity:0.35">−</button>'
         +'<span class="esc-n" data-flavor="'+f+'">0</span>'
         +'<button class="esc-p" data-flavor="'+f+'">+</button>'
         +'<span class="esc-price" data-flavor="'+f+'">+0₽</span>'
@@ -274,7 +327,7 @@ function createCard(item,category){
     iceCreamFlavorHTML='<div class="required-choice"><div class="rc-label">🍦 Вкус мороженого</div><div class="rc-pills">'+fpills+'</div></div>'+extraSection;
   }
 
-  /* Ice cream 3 scoops */
+  // Ice cream 3 scoops
   var iceCream3HTML='';
   if(hasIceCream3){
     var rows3=iceFlavors.map(function(f){
@@ -291,7 +344,7 @@ function createCard(item,category){
     }).join('');
     iceCream3HTML='<div class="required-choice icecream3-section">'
       +'<div class="rc-label">🍦 Выберите 3 шарика</div>'
-      +'<div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Порция — 3 шарика, можно разные вкусы · Доп. шарик +'+extraScoopPrice+'₽</div>'
+      +'<div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Порция — 3 шарика · Доп. шарик +'+extraScoopPrice+'₽</div>'
       +rows3
       +'<div class="scoop-total-row">Выбрано: <span class="scoop-total-num">0</span> шт. — <span class="scoop-total-price">250₽</span>'
       +' <span class="scoop-hint-min" style="color:#ff6b6b;font-size:11px">(нужно мин. 3)</span></div>'
@@ -302,10 +355,10 @@ function createCard(item,category){
       +'</div>';
   }
 
-  /* Toppings */
+  // Toppings (per-item)
   var toppingHTML='';
   if(hasToppings){
-    var tpills=TOPPINGS.map(function(t){
+    var tpills=itemToppings.map(function(t){
       return '<button class="tp-pill topping-pill" data-id="'+t.id+'" data-price="'+t.price+'">+ '+t.label+' <span>'+t.price+'₽</span></button>';
     }).join('');
     toppingHTML='<div class="toppings-section"><div class="tp-label">Добавки (по желанию)</div><div class="tp-pills">'+tpills+'</div></div>';
@@ -323,7 +376,7 @@ function createCard(item,category){
     +'<button class="card-qty-btn card-plus">+</button>'
     +'</div></div>';
 
-  /* State */
+  // State
   var curPrice    =isRequired?null:basePrice;
   var curVariant  =isRequired?null:(hasVariants?item.variants[0].label:'');
   var curCheese   =null;
@@ -374,7 +427,7 @@ function createCard(item,category){
     if(mBtn)  mBtn.style.opacity=n>0?'1':'0.35';
   }
 
-  /* Variant */
+  // Variant buttons
   if(hasVariants){
     var vBtns=el.querySelectorAll('.rc-btn:not(.cheese-btn):not(.filling-btn):not(.ice-flavor-btn)');
     vBtns.forEach(function(btn){
@@ -383,12 +436,19 @@ function createCard(item,category){
         btn.classList.add('selected');
         curPrice=parseInt(btn.dataset.price);
         curVariant=btn.dataset.label;
+        // Update photo on variant change (VARIANT_PHOTOS or MENU_PHOTOS fallback)
+        var vp=VARIANT_PHOTOS[item.name];
+        var img=el.querySelector('.card-photo-img');
+        if(img){
+          var newSrc=(vp&&vp[btn.dataset.label])?vp[btn.dataset.label]:(MENU_PHOTOS[item.name]||'');
+          if(newSrc)img.src=newSrc;
+        }
         refreshPrice();syncCard();
       });
     });
     if(!isRequired){curPrice=item.variants[0].price;curVariant=item.variants[0].label;}
   }
-  /* Cheese */
+  // Cheese
   if(hasCheeseChoice){
     var cBtns=el.querySelectorAll('.cheese-btn');
     cBtns.forEach(function(btn){
@@ -398,7 +458,7 @@ function createCard(item,category){
       });
     });
   }
-  /* Filling */
+  // Filling
   if(fillingChoice){
     var flBtns=el.querySelectorAll('.filling-btn');
     flBtns.forEach(function(btn){
@@ -408,7 +468,7 @@ function createCard(item,category){
       });
     });
   }
-  /* Ice cream flavor */
+  // Ice cream flavor
   if(hasIceCreamFlav){
     var ifBtns=el.querySelectorAll('.ice-flavor-btn');
     ifBtns.forEach(function(btn){
@@ -419,19 +479,14 @@ function createCard(item,category){
     });
     if(!noExtraScoop){
       el.querySelectorAll('.esc-p').forEach(function(btn){
-        btn.addEventListener('click',function(){
-          var f=btn.dataset.flavor;extraScoops[f]=(extraScoops[f]||0)+1;updateExtraUI(f);refreshPrice();syncCard();
-        });
+        btn.addEventListener('click',function(){var f=btn.dataset.flavor;extraScoops[f]=(extraScoops[f]||0)+1;updateExtraUI(f);refreshPrice();syncCard();});
       });
       el.querySelectorAll('.esc-m').forEach(function(btn){
-        btn.addEventListener('click',function(){
-          var f=btn.dataset.flavor;
-          if((extraScoops[f]||0)>0){extraScoops[f]--;updateExtraUI(f);refreshPrice();syncCard();}
-        });
+        btn.addEventListener('click',function(){var f=btn.dataset.flavor;if((extraScoops[f]||0)>0){extraScoops[f]--;updateExtraUI(f);refreshPrice();syncCard();}});
       });
     }
   }
-  /* Ice cream 3 */
+  // Ice cream 3
   if(hasIceCream3){
     curPrice=item.price;
     el.querySelectorAll('.scoop-row').forEach(function(row){
@@ -448,13 +503,13 @@ function createCard(item,category){
       });
     });
   }
-  /* Toppings */
+  // Toppings
   if(hasToppings){
     el.querySelectorAll('.topping-pill').forEach(function(pill){
       pill.addEventListener('click',function(){
         pill.classList.toggle('active');
         var id=pill.dataset.id,price=parseInt(pill.dataset.price);
-        var tObj=TOPPINGS.find(function(t){return t.id===id;});
+        var tObj=itemToppings.find(function(t){return t.id===id;});
         if(pill.classList.contains('active')){selTops.push({id:id,price:price,label:tObj?tObj.label:id});}
         else{selTops=selTops.filter(function(t){return t.id!==id;});}
         refreshPrice();syncCard();
@@ -462,7 +517,7 @@ function createCard(item,category){
     });
   }
 
-  function buildVariantLabel(){
+  function buildLabel(){
     var parts=[];
     if(curVariant)parts.push(curVariant);
     if(curCheese) parts.push('сыр: '+curCheese);
@@ -474,7 +529,7 @@ function createCard(item,category){
     if(hasIceCream3)iceFlavors.forEach(function(f){if((scoopCounts[f]||0)>0)parts.push(scoopCounts[f]+'x'+f);});
     return parts.join(', ');
   }
-  function curKey(){return makeKey(item.name,buildVariantLabel(),selTops.map(function(t){return t.id;}));}
+  function curKey(){return makeKey(item.name,buildLabel(),selTops.map(function(t){return t.id;}));}
   function getQty(){var k=curKey(),e=cart.find(function(i){return i.key===k;});return e?e.qty:0;}
   function syncCard(){
     var qty=getQty();addBtn.style.display=qty>0?'none':'';
@@ -487,13 +542,9 @@ function createCard(item,category){
     if(fillingChoice&&!curFilling){pulse('.filling-btn');showToast('🥞 Выберите начинку');return;}
     if(hasIceCreamFlav&&!curIceFlavor){pulse('.ice-flavor-btn');showToast('🍦 Выберите вкус мороженого');return;}
     if(hasIceCream3&&totalScoops3()<3){showToast('🍦 Добавьте минимум 3 шарика');return;}
-    addToCart(curKey(),item.name,totalPrice(),buildVariantLabel(),selTops.slice());syncCard();
+    addToCart(curKey(),item.name,totalPrice(),buildLabel(),selTops.slice());syncCard();
   });
-  function pulse(sel){
-    var bs=el.querySelectorAll(sel);
-    bs.forEach(function(b){b.classList.add('pulse');});
-    setTimeout(function(){bs.forEach(function(b){b.classList.remove('pulse');});},600);
-  }
+  function pulse(sel){var bs=el.querySelectorAll(sel);bs.forEach(function(b){b.classList.add('pulse');});setTimeout(function(){bs.forEach(function(b){b.classList.remove('pulse');});},600);}
   el.querySelector('.card-minus').addEventListener('click',function(){changeQtyByKey(curKey(),-1);syncCard();});
   el.querySelector('.card-plus').addEventListener('click', function(){changeQtyByKey(curKey(), 1);syncCard();});
   el._sync=syncCard;
@@ -513,9 +564,7 @@ renderGrid('grid-desserts',menuData.desserts,'desserts');
 renderGrid('grid-drinks',  menuData.drinks,  'drinks');
 renderGrid('grid-hot',     menuData.hot,     'hot');
 
-/* ==============================
-   CART OPERATIONS
-============================== */
+/* ══ CART OPS ════════════════════════════════════════════ */
 function addToCart(key,name,price,variant,tops){
   var ex=cart.find(function(i){return i.key===key;});
   if(ex){ex.qty++;}else cart.push({key:key,name:name,price:price,variant:variant,tops:tops||[],qty:1});
@@ -562,9 +611,7 @@ function renderCart(){
   });
 }
 
-/* ==============================
-   CART DRAWER
-============================== */
+/* ══ CART DRAWER ════════════════════════════════════════ */
 var cartOverlay=document.getElementById('cartOverlay'),cartDrawer=document.getElementById('cartDrawer');
 function openCart(){cartOverlay.classList.add('open');cartDrawer.classList.add('open');document.body.style.overflow='hidden';}
 function closeCart(){cartOverlay.classList.remove('open');cartDrawer.classList.remove('open');document.body.style.overflow='';}
@@ -573,9 +620,7 @@ document.getElementById('cartClose').addEventListener('click',closeCart);
 document.getElementById('bottomCartBtn').addEventListener('click',openCart);
 cartOverlay.addEventListener('click',closeCart);
 
-/* ==============================
-   TABS
-============================== */
+/* ══ TABS ════════════════════════════════════════════════ */
 var tabs=document.querySelectorAll('.tab'),indicator=document.getElementById('tabIndicator');
 function moveIndicator(t){indicator.style.width=t.offsetWidth+'px';indicator.style.height=t.offsetHeight+'px';indicator.style.left=t.offsetLeft+'px';indicator.style.top=t.offsetTop+'px';}
 setTimeout(function(){var a=document.querySelector('.tab.active');if(a)moveIndicator(a);},60);
@@ -600,18 +645,14 @@ tabs.forEach(function(tab){
   });
 });
 
-/* ==============================
-   DELIVERY
-============================== */
+/* ══ DELIVERY ════════════════════════════════════════════ */
 var villageSelect=document.getElementById('villageSelect');
 DELIVERY_OPTIONS.forEach(function(opt,i){var o=document.createElement('option');o.value=opt.name;o.textContent=opt.name+'  (+'+opt.price+' ₽)';if(i===0)o.selected=true;villageSelect.appendChild(o);});
 function getDeliveryFee(){var a=document.querySelector('.toggle-option.active');if(!a||a.dataset.value!=='delivery')return 0;var o=DELIVERY_OPTIONS[villageSelect.selectedIndex];return o?o.price:0;}
 function updateDeliveryNote(){var fee=getDeliveryFee(),note=document.getElementById('deliveryPriceNote');note.textContent=fee>0?'Стоимость доставки: '+fee+' ₽':'';refreshModalPreview();}
 villageSelect.addEventListener('change',updateDeliveryNote);
 
-/* ==============================
-   ORDER MODAL
-============================== */
+/* ══ ORDER MODAL ═════════════════════════════════════════ */
 var modalOverlay=document.getElementById('modalOverlay'),deliveryOptions=document.querySelectorAll('.toggle-option'),deliveryBlock=document.getElementById('deliveryBlock');
 deliveryOptions.forEach(function(opt){
   opt.addEventListener('click',function(){deliveryOptions.forEach(function(o){o.classList.remove('active');});opt.classList.add('active');deliveryBlock.classList.toggle('visible',opt.dataset.value==='delivery');updateDeliveryNote();});
@@ -635,9 +676,7 @@ function closeModal(){modalOverlay.classList.remove('open');}
 document.getElementById('modalClose').addEventListener('click',closeModal);
 modalOverlay.addEventListener('click',function(e){if(e.target===modalOverlay)closeModal();});
 
-/* ==============================
-   VALIDATE
-============================== */
+/* ══ VALIDATE ════════════════════════════════════════════ */
 function validateForm(){
   var name=document.getElementById('inputName').value.trim();
   var phone=document.getElementById('inputPhone').value.trim();
@@ -656,9 +695,7 @@ function validateForm(){
 function clearForm(){document.getElementById('inputName').value='';document.getElementById('inputPhone').value='';var a=document.getElementById('inputAddress');if(a)a.value='';}
 function clearCart(){cart=[];renderCart();}
 
-/* ==============================
-   BUILD ORDER TEXT
-============================== */
+/* ══ BUILD ORDER TEXT ════════════════════════════════════ */
 function buildOrderText(f){
   var fee=getDeliveryFee(),total=cartSum()+fee;
   var tl={pickup:'Самовывоз',hall:'Питание в зале',delivery:'Доставка'};
@@ -674,9 +711,7 @@ function buildOrderText(f){
   return lines.join('\n');
 }
 
-/* ==============================
-   GOOGLE SCRIPT SEND
-============================== */
+/* ══ GOOGLE SCRIPT SEND ══════════════════════════════════ */
 document.getElementById('btnSendScript').addEventListener('click',async function(){
   var f=validateForm();if(!f)return;
   var fee=getDeliveryFee(),total=cartSum()+fee;
@@ -698,9 +733,7 @@ document.getElementById('btnSendScript').addEventListener('click',async function
   finally{btn.disabled=false;btn.textContent='⚡ Авто (рекомендуем)';}
 });
 
-/* ==============================
-   COPY MODAL
-============================== */
+/* ══ COPY MODAL ══════════════════════════════════════════ */
 var copyModalOverlay=document.getElementById('copyModalOverlay'),copyTargetUrl='';
 function openCopyModal(icon,title,url){
   var f=validateForm();if(!f)return;
@@ -727,9 +760,7 @@ document.getElementById('btnOpenApp').addEventListener('click',function(){
 document.getElementById('copyModalClose').addEventListener('click',function(){copyModalOverlay.classList.remove('open');});
 copyModalOverlay.addEventListener('click',function(e){if(e.target===copyModalOverlay)copyModalOverlay.classList.remove('open');});
 
-/* ==============================
-   SUCCESS MODAL
-============================== */
+/* ══ SUCCESS MODAL ═══════════════════════════════════════ */
 var successModalOverlay=document.getElementById('successModalOverlay');
 function showSuccessModal(clientName){
   document.getElementById('successOrderSummary').innerHTML='<b style="color:var(--gold)">'+clientName+'</b>, ваш заказ отправлен!';
@@ -741,16 +772,12 @@ function showSuccessModal(clientName){
 document.getElementById('successClose').addEventListener('click',function(){successModalOverlay.classList.remove('open');});
 successModalOverlay.addEventListener('click',function(e){if(e.target===successModalOverlay)successModalOverlay.classList.remove('open');});
 
-/* ==============================
-   SUPPORT LINKS
-============================== */
+/* ══ SUPPORT ═════════════════════════════════════════════ */
 document.getElementById('supportTg').href=CONTACTS.telegram;
 document.getElementById('supportWa').href=CONTACTS.whatsapp;
 document.getElementById('supportMax').href=CONTACTS.max;
 
-/* ==============================
-   PRIVACY MODAL
-============================== */
+/* ══ PRIVACY MODAL ═══════════════════════════════════════ */
 var privacyOverlay=document.getElementById('privacyModalOverlay');
 document.getElementById('consentLink').addEventListener('click',function(e){e.preventDefault();privacyOverlay.classList.add('open');});
 document.getElementById('privacyAccept').addEventListener('click',function(){document.getElementById('consentCheck').checked=true;updateConsentState();privacyOverlay.classList.remove('open');});
@@ -759,9 +786,7 @@ privacyOverlay.addEventListener('click',function(e){if(e.target===privacyOverlay
 function updateConsentState(){var checked=document.getElementById('consentCheck').checked;var row=document.getElementById('consentRow');if(row)row.classList.toggle('consent-active',checked);}
 document.getElementById('consentCheck').addEventListener('change',updateConsentState);
 
-/* ==============================
-   SUCCESS BANNER + TOAST
-============================== */
+/* ══ BANNER + TOAST ══════════════════════════════════════ */
 function showSuccessBanner(){var b=document.getElementById('successBanner');b.classList.add('show');setTimeout(function(){b.classList.remove('show');},4000);}
 function showToast(msg){
   var c=document.getElementById('toastContainer'),t=document.createElement('div');
@@ -769,5 +794,4 @@ function showToast(msg){
   setTimeout(function(){t.remove();},2100);
 }
 
-/* INIT */
 renderCart();
